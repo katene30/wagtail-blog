@@ -1,6 +1,8 @@
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
+# TODO: add list block for icons
+# TODO: update card block for blog posts
 
 class TitleAndTextBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True, help_text='Add your title')
@@ -54,3 +56,15 @@ class SimpleRichTextBlock(blocks.RichTextBlock):
         template = "richtext_block.html"
         icon = "edit"
         label = "Simple RichText"
+
+class CTABlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=True, max_length=60)
+    text = blocks.RichTextBlock(required=True, features=["bold","italic"])
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, deafult='Learn More', max_length=40)
+
+    class Meta:
+        template = "cta_block.html"
+        icon = "pick"
+        label = "Call to Action"
