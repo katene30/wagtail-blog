@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.settings",
+    "wagtail.contrib.modeladmin",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -51,7 +52,8 @@ INSTALLED_APPS = [
     "menus",
     "streamfields",
     "flex",
-    "site_settings"
+    "site_settings",
+    "subscribers"
 ]
 
 MIDDLEWARE = [
