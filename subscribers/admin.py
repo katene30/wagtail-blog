@@ -7,7 +7,7 @@ from .models import Subscribers
 class SubscriberAdmin(ModelAdmin):
     model = Subscribers
     menu_label = "Subscribers"
-    menu_icon = "placeholder"
+    menu_icon = "mail"
     menu_order = 5
     add_to_settings_menu = False
     exclude_from_explorer = False

@@ -11,14 +11,42 @@
 
     {% for post in blogpages %}
         {% with post=post.specific %}
-            <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+        <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+        <div class="py-1">
+        {% with categories=post.categories.all %}
+            {% if categories %}
+                {% for category in categories %}
+                        {% image category.icon fill-32x32 style="vertical-align: middle" %}
+                        {{ category.name }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
 
             {% with post.main_image as main_image %}
-                {% if main_image %}{% image main_image fill-160x100 %}{% endif %}
+                {% image main_image fill-320x240 as img %}
+
+                {% if main_image %}
+                    <img src="{{img.url}}" alt="{{img.alt}}" class="img-thumbnail">
+                {% endif %}
             {% endwith %}
 
-            <p>{{ post.intro }}</p>
-            {{ post.body|richtext }}
+
+
+            {% with tags=post.tags.all %}
+                {% if post.tags %}
+                    <div class="tags pt-1">
+                        {% for tag in tags %}
+                            <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button class="btn btn-primary" type="button">{{ tag }}</button></a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <p><b>{{ post.intro }}</b></p>
+
         {% endwith %}
     {% endfor %}
 
