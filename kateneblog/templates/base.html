@@ -60,16 +60,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/">Home
-                                <span class="visually-hidden">(current)</span>
-                            </a>
-                        </li>
                         
                         {% for item in navigation.menu_items.all %}
-                        <li class="nav-item">
-                            <a class="nav-link" href={{item.link}} {% if item.open_in_new_tab %} target="_blank"{% endif %}>{{item.title}}</a>
-                        </li>
+                            {% with url_name=request.resolver_match.url_name %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.path == item.link %}active{% endif %}" href={{item.link}} {% if item.open_in_new_tab %} target="_blank"{% endif %}>{{item.title}}</a>
+                                </li>
+                            {% endwith %}
                         {% endfor %}
                         
                     </ul>
