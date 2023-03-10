@@ -1,10 +1,12 @@
 from django import forms
 from django.db import models
+from django.shortcuts import render
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
@@ -12,7 +14,7 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 
-class BlogIndexPage(Page):
+class BlogIndexPage(RoutablePageMixin, Page):
     intro = RichTextField(blank=True)
 
     def get_context(self, request):
@@ -21,6 +23,11 @@ class BlogIndexPage(Page):
         context['blogpages'] = blogpages
         return context
 
+    @route(r'^latest/$', name="latest_posts")
+    def latest_blog_posts_only_show_last_5(self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+        context["posts"] = self.get_children().live().order_by('-first_published_at')[:4]
+        return render(request, "blog/latest_posts.html", context)
 
     content_panels = Page.content_panels + [
         FieldPanel('intro')
