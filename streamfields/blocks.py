@@ -57,18 +57,6 @@ class SimpleRichTextBlock(blocks.RichTextBlock):
         icon = "edit"
         label = "Simple RichText"
 
-class CTABlock(blocks.StructBlock):
-    title = blocks.CharBlock(required=True, max_length=60)
-    text = blocks.RichTextBlock(required=True, features=["bold","italic"])
-    button_page = blocks.PageChooserBlock(required=False)
-    button_url = blocks.URLBlock(required=False)
-    button_text = blocks.CharBlock(required=True, deafult='Learn More', max_length=40)
-
-    class Meta:
-        template = "cta_block.html"
-        icon = "pick"
-        label = "Call to Action"
-
 class LinkStructValue(blocks.StructValue):
 
     def url(self):
@@ -79,6 +67,22 @@ class LinkStructValue(blocks.StructValue):
         elif button_url:
             return button_url
         return None
+
+class CTABlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=True, max_length=60)
+    subtitle = blocks.CharBlock(required=True, max_length=60)
+    text = blocks.RichTextBlock(required=True, features=["bold","italic"])
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, deafult='Learn More', max_length=40)
+
+
+
+    class Meta:
+        template = "cta_block.html"
+        icon = "pick"
+        label = "Call to Action"
+        value_class = LinkStructValue
 
 
 class ButtonBlock(blocks.StructBlock):
