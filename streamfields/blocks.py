@@ -4,6 +4,17 @@ from wagtail.images.blocks import ImageChooserBlock
 # TODO: add list block for icons
 # TODO: update card block for blog posts
 
+class LinkStructValue(blocks.StructValue):
+
+    def url(self):
+        button_page = self.get('button_page')
+        button_url = self.get('button_url')
+        if button_page:
+            return button_page.url
+        elif button_url:
+            return button_url
+        return None
+
 class TitleAndTextBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True, help_text='Add your title')
     text = blocks.TextBlock(required=True, help_text='Add additional text')
@@ -31,6 +42,8 @@ class CardBlock(blocks.StructBlock):
         template = "card_block.html"
         icon = "placeholder"
         label = "Staff Cards"
+        value_class = LinkStructValue
+
 
 
 class RichTextBlock(blocks.RichTextBlock):
@@ -57,16 +70,7 @@ class SimpleRichTextBlock(blocks.RichTextBlock):
         icon = "edit"
         label = "Simple RichText"
 
-class LinkStructValue(blocks.StructValue):
 
-    def url(self):
-        button_page = self.get('button_page')
-        button_url = self.get('button_url')
-        if button_page:
-            return button_page.url
-        elif button_url:
-            return button_url
-        return None
 
 class CTABlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True, max_length=60)
