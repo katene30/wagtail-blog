@@ -97,7 +97,7 @@ class BlogPage(Page):
         ], heading="Blog information"),
         FieldPanel('intro'),
         FieldPanel('body'),
-        InlinePanel('gallery_images', label="Gallery images"),
+        InlinePanel('gallery_images', label="Gallery images",  max_num=6),
     ]
 
 class BlogPageGalleryImage(Orderable):

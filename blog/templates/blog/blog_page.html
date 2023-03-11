@@ -5,6 +5,7 @@
 {% block body_class %}template-blogpage{% endblock %}
 
 {% block content %}
+    
     <h1>{{ page.title }}</h1>
 
 
@@ -12,7 +13,7 @@
 
     {% with categories=page.categories.all %}
         {% if categories %}
-            <h3>Posted in:</h3>
+            <h2>Posted in:</h2>
             <ul>
                 {% for category in categories %}
                     <li style="display: inline">
@@ -27,7 +28,7 @@
     {% with tags=page.tags.all %}
         {% if tags %}
             <div class="tags">
-                <h3>Tags</h3>
+                <h2>Tags</h2>
                 {% for tag in tags %}
                     <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button class="btn btn-primary" type="button">{{ tag }}</button></a>
                 {% endfor %}
@@ -39,13 +40,16 @@
 
     {{ page.body|richtext }}
 
+    <div class="row">
     {% for item in page.gallery_images.all %}
-        <div style="float: left; margin: 10px">
-            {% image item.image fill-320x240 %}
-            <p>{{ item.caption }}</p>
-        </div>
+            <div class="col">
+                {% image item.image fill-320x240 %}
+                <p>{{ item.caption }}</p>
+            </div>
     {% endfor %}
+    </div>
 
     <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+    
 
 {% endblock %}
