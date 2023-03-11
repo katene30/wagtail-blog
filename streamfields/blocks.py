@@ -40,8 +40,8 @@ class CardBlock(blocks.StructBlock):
     )
     class Meta:
         template = "card_block.html"
-        icon = "placeholder"
-        label = "Staff Cards"
+        icon = "group"
+        label = "Card Group"
         value_class = LinkStructValue
 
 
