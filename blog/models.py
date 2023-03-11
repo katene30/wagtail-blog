@@ -13,6 +13,43 @@ from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
+@register_snippet
+class BlogAuthor(models.Model):
+
+    name = models.CharField(max_length=100)
+    website = models.URLField(blank=True, null=True)
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
+        related_name='+'
+    )
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel('name'),
+                FieldPanel('image')
+            ], heading='Name and Image',
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('website'),
+            ], heading='Links',
+        )
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Blog Author'
+        verbose_name_plural = 'Blog Authors'
+
+
+
+
 
 class BlogIndexPage(RoutablePageMixin, Page):
     intro = RichTextField(blank=True)
@@ -23,23 +60,23 @@ class BlogIndexPage(RoutablePageMixin, Page):
         context['blogpages'] = blogpages
         return context
 
-    @route(r'^latest/$', name="latest_posts")
+    @route(r'^latest/$', name='latest_posts')
     def latest_blog_posts_only_show_last_5(self, request, *args, **kwargs):
         context = self.get_context(request, *args, **kwargs)
-        context["posts"] = self.get_children().live().order_by('-first_published_at')[:4]
-        return render(request, "blog/latest_posts.html", context)
+        context['posts'] = self.get_children().live().order_by('-first_published_at')[:4]
+        return render(request, 'blog/latest_posts.html', context)
 
     def get_sitemap_urls(self, request=None):
         sitemap = super().get_sitemap_urls(request)
         sitemap.append(
             {
-                "location": self.full_url + self.reverse_subpage("latest_posts"),
-                "lastmod": (self.last_published_at or self.latest_revision_created_at),
+                'location': self.full_url + self.reverse_subpage('latest_posts'),
+                'lastmod': (self.last_published_at or self.latest_revision_created_at),
             }
         )
 
-        blog = next(sitemap_entry for sitemap_entry in sitemap if sitemap_entry["location"] == self.full_url)
-        blog["priority"] = 0.9
+        blog = next(sitemap_entry for sitemap_entry in sitemap if sitemap_entry['location'] == self.full_url)
+        blog['priority'] = 0.9
         
 
         return sitemap
@@ -70,7 +107,7 @@ class BlogPageTag(TaggedItemBase):
 
 
 class BlogPage(Page):
-    date = models.DateField("Post date")
+    date = models.DateField('Post date')
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
@@ -94,10 +131,10 @@ class BlogPage(Page):
             FieldPanel('date'),
             FieldPanel('tags'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
-        ], heading="Blog information"),
+        ], heading='Blog information'),
         FieldPanel('intro'),
         FieldPanel('body'),
-        InlinePanel('gallery_images', label="Gallery images",  max_num=6),
+        InlinePanel('gallery_images', label='Gallery images',  max_num=6),
     ]
 
 class BlogPageGalleryImage(Orderable):
