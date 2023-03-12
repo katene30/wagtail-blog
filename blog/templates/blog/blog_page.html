@@ -11,6 +11,22 @@
 
     <p class="meta">{{ page.date }}</p>
 
+    <ul>    
+        Author(s)
+            {% for item in page.blog_authors.all %}
+                {% image item.author.image  fill-50x50 as img%}
+            <li>
+                <img src="{{ img.url }}" alt="{{ item.author.name }}">
+                {{item.author.name}}
+                {% if item.author.website %}
+                    <a href="{{ item.author.website }}">
+                        <i class="fa-solid fa-globe"></i>
+                    </a>
+                {% endif %}
+            </li>
+            {% endfor%}
+    </ul>
+
     {% with categories=page.categories.all %}
         {% if categories %}
             <h2>Posted in:</h2>

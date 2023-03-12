@@ -12,6 +12,19 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+
+class BlogAuthorOrderable(Orderable):
+    page = ParentalKey("blog.BlogPage", related_name="blog_authors")
+    author = models.ForeignKey(
+        "blog.BlogAuthor",
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("author"),
+    ]
 
 @register_snippet
 class BlogAuthor(models.Model):
@@ -132,6 +145,12 @@ class BlogPage(Page):
             FieldPanel('tags'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
         ], heading='Blog information'),
+        MultiFieldPanel(
+            [
+                InlinePanel('blog_authors', label='Author', min_num=1, max_num=4)
+            ],
+            heading='Author(s)'
+        ),
         FieldPanel('intro'),
         FieldPanel('body'),
         InlinePanel('gallery_images', label='Gallery images',  max_num=6),
