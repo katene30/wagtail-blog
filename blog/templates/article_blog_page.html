@@ -62,29 +62,31 @@
         {% include_block block %}
     {% endfor %}
 
-    <div class="mx-auto" style="width:640px">
-        <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel" >
-            <div class="carousel-inner">
-                {% for item in page.gallery_images.all %}
-                    {% image item.image fill-640x480 as img %}
-                    <div class="carousel-item{% if forloop.counter == 1 %} active{% endif %}">
-                        <img src="{{ img.url }}" class="d-block w-100" alt="{{ img.alt }}">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h3>{{ item.caption }}</h3>
+    {% if page.gallery_images %}
+        <div class="mx-auto" style="width:640px">
+            <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel" >
+                <div class="carousel-inner">
+                    {% for item in page.gallery_images.all %}
+                        {% image item.image fill-640x480 as img %}
+                        <div class="carousel-item{% if forloop.counter == 1 %} active{% endif %}">
+                            <img src="{{ img.url }}" class="d-block w-100" alt="{{ img.alt }}">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h3>{{ item.caption }}</h3>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
-    </div>
+    {% endif %}
 
     <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
     
