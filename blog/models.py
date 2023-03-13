@@ -1,4 +1,5 @@
 from django import forms
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.shortcuts import render
 
@@ -87,7 +88,18 @@ class BlogIndexPage(RoutablePageMixin, Page):
     def get_context(self, request):
         context = super().get_context(request)
         blogpages = self.get_children().live().order_by('-first_published_at')
-        context['blogpages'] = blogpages
+
+        paginator = Paginator(blogpages, 5) # todo change to 5 per page
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['blogpages'] = posts
         return context
 
     @route(r'^latest/$', name='latest_posts')
