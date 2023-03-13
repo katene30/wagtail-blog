@@ -57,7 +57,9 @@
     <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ self.youtube_video_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 
-    {{ page.body|richtext }}
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
 
     <div class="mx-auto" style="width:640px">
         <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel" >

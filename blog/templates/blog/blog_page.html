@@ -52,7 +52,9 @@
         <b>{{ page.intro }}</b>
     </div>
 
-    {{ page.body|richtext }}
+    {% for block in page.body %}
+        {% include_block block %}
+    {% endfor %}
 
     <div class="mx-auto" style="width:640px">
         <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel" >

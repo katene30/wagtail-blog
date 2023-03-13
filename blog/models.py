@@ -10,10 +10,13 @@ from taggit.models import TaggedItemBase
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.core.fields import StreamField
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from streamfields import blocks
 
 
 class BlogAuthorOrderable(Orderable):
@@ -151,9 +154,21 @@ class BlogPageTag(TaggedItemBase):
 class BlogPage(Page):
     date = models.DateField('Post date')
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
+
+    body = StreamField(
+        [
+            ("title_and_text", blocks.TitleAndTextBlock()),
+            ("full_richtext", blocks.RichTextBlock()),
+            ("simple_richtext", blocks.SimpleRichTextBlock()),
+            ("cards", blocks.CardBlock()),
+            ("cta", blocks.CTABlock()),
+            ("button", blocks.ButtonBlock()),
+        ],
+        null=True,
+        blank=True
+    )
 
     def main_image(self):
         gallery_item = self.gallery_images.first()
@@ -181,7 +196,7 @@ class BlogPage(Page):
             heading='Author(s)'
         ),
         FieldPanel('intro'),
-        FieldPanel('body'),
+        StreamFieldPanel("body"),
         InlinePanel('gallery_images', label='Gallery images',  max_num=6),
     ]
 
@@ -220,7 +235,7 @@ class ArticleBlogPage(BlogPage):
             heading='Author(s)'
         ),
         FieldPanel('intro'),
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
         InlinePanel('gallery_images', label='Gallery images',  max_num=6),
     ]
 
@@ -243,7 +258,7 @@ class VideoBlogPage(BlogPage):
         ),
         FieldPanel('intro'),
         FieldPanel('youtube_video_id'),
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
         InlinePanel('gallery_images', label='Gallery images',  max_num=6),
     ]
 
