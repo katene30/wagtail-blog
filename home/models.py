@@ -32,10 +32,19 @@ class HomePageCarouselImages(Orderable):
 
 
 class HomePage(RoutablePageMixin, Page):
-    body = RichTextField(blank=True)
+    body = StreamField(
+        [
+            ("title_and_text", blocks.TitleAndTextBlock()),
+            ("full_richtext", blocks.RichTextBlock()),
+            ("simple_richtext", blocks.SimpleRichTextBlock()),
+        ],
+        null=True,
+        blank=True
+    )
+
     max_count = 1
 
-    content = StreamField(
+    cta = StreamField(
         [
             ("cta", blocks.CTABlock()),
         ],
@@ -46,11 +55,11 @@ class HomePage(RoutablePageMixin, Page):
 
 
     content_panels = Page.content_panels + [
-        FieldPanel('body'),
+        StreamFieldPanel('body'),
         MultiFieldPanel([
             InlinePanel("carousel_images", max_num=5, min_num=1, label="image"),
         ], heading="Carousel Images"), 
-        StreamFieldPanel("content"),
+        StreamFieldPanel("cta"),
     ]
 
     @route(r'^subscribe/$')
