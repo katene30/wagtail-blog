@@ -11,11 +11,9 @@
 
     <p class="meta">{{ page.date }}</p>
 
-    <ul>    
-        Author(s)
+        <h2>Author(s)</h2>
             {% for item in page.blog_authors.all %}
-                {% image item.author.image  fill-50x50 as img%}
-            <li>
+                {% image item.author.image  fill-30x30 as img%}
                 <img src="{{ img.url }}" alt="{{ item.author.name }}">
                 {{item.author.name}}
                 {% if item.author.website %}
@@ -23,9 +21,7 @@
                         <i class="fa-solid fa-globe"></i>
                     </a>
                 {% endif %}
-            </li>
             {% endfor%}
-    </ul>
 
     {% with categories=page.categories.all %}
         {% if categories %}

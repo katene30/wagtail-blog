@@ -61,7 +61,24 @@ class BlogAuthor(models.Model):
         verbose_name_plural = 'Blog Authors'
 
 
+@register_snippet
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='+'
+    )
 
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('icon'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'blog categories'
 
 
 class BlogIndexPage(RoutablePageMixin, Page):
@@ -168,21 +185,3 @@ class BlogPageGalleryImage(Orderable):
         FieldPanel('caption'),
     ]
 
-@register_snippet
-class BlogCategory(models.Model):
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='+'
-    )
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('icon'),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = 'blog categories'
