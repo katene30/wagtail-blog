@@ -7,7 +7,13 @@
 {% block content %}
     
     <h1>{{ page.title }}</h1>
+    {% image self.intro_image fill-1200x300 as intro_img%}
+    <img src="{{ intro_img.url }}" alt="{{ intro_img.alt }}">
 
+    {% if self.subtitle %}
+        <h2>{{ self.subtitle }}</h2>
+    {% endif %}
+    
 
     <p class="meta">{{ page.date }}</p>
 

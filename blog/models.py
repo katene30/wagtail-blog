@@ -173,6 +173,70 @@ class BlogPage(Page):
         InlinePanel('gallery_images', label='Gallery images',  max_num=6),
     ]
 
+
+class ArticleBlogPage(BlogPage):
+
+    template='article_blog_page.html'
+
+    subtitle = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+        )
+    
+    intro_image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text='Best size for this image will be 400x400'
+    )
+
+
+    content_panels = Page.content_panels + [
+        FieldPanel('subtitle'),
+        FieldPanel('intro_image'),
+        MultiFieldPanel([
+            FieldPanel('date'),
+            FieldPanel('tags'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
+        ], heading='Blog information'),
+        MultiFieldPanel(
+            [
+                InlinePanel('blog_authors', label='Author', min_num=1, max_num=4)
+            ],
+            heading='Author(s)'
+        ),
+        FieldPanel('intro'),
+        FieldPanel('body'),
+        InlinePanel('gallery_images', label='Gallery images',  max_num=6),
+    ]
+
+class VideoBlogPage(BlogPage):
+
+    template='video_blog_page.html'
+    youtube_video_id = models.CharField(max_length=30)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('date'),
+            FieldPanel('tags'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
+        ], heading='Blog information'),
+        MultiFieldPanel(
+            [
+                InlinePanel('blog_authors', label='Author', min_num=1, max_num=4)
+            ],
+            heading='Author(s)'
+        ),
+        FieldPanel('intro'),
+        FieldPanel('youtube_video_id'),
+        FieldPanel('body'),
+        InlinePanel('gallery_images', label='Gallery images',  max_num=6),
+    ]
+
+
+
 class BlogPageGalleryImage(Orderable):
     page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name='gallery_images')
     image = models.ForeignKey(
