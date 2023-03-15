@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     "streamfields",
     "flex",
     "site_settings",
-    "subscribers"
+    "subscribers",
+    "contact"
 ]
 
 MIDDLEWARE = [
